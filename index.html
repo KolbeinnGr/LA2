@@ -33,7 +33,7 @@
         .icon.selected {
             color: yellow;
         }
-        .color-pick {
+        .navEle {
             position: relative;
             display: inline-block;
             float: right;
@@ -57,11 +57,12 @@
             <i class="fa fa-star-o" aria-hidden="true"></i>
         </div>
 
-        <div class="color-pick">
+        <div class="navEle">
             <label for="colorPick"></label><input type="color" id="colorPicker" name="color"
                                              value="#000000">
             <input type="checkbox" id="filled" name="fill">
         </div>
+        <div class="navEle"><button id="undoButton">Undo</button></div>
     </nav>
     <div class="container">
         <canvas id="my-canvas" width="800" height="600">

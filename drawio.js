@@ -17,12 +17,14 @@ $(function() {
     function drawCanvas() {
         if (drawio.selectedElement) {
             drawio.selectedElement.render();
+
         }
+
         for (let i = 0; i< drawio.shapes.length; i++){
             // let shape = drawio.shapes[i].render();
             drawio.ctx.fillStyle = drawio.shapes[i].color;
             drawio.ctx.strokeStyle = drawio.shapes[i].color;
-            console.log(drawio.shapes);
+            // console.log(drawio.shapes);
             drawio.shapes[i].element.render(drawio.shapes[i].checked);
         }
     }
@@ -65,4 +67,11 @@ $(function() {
         drawio.selectedElement = null;
     });
 
+    // undo
+    $('#undoButton').on('click', function(){
+        drawio.shapes.pop();
+        drawio.ctx.clearRect(0, 0, drawio.canvas.width, drawio.canvas.height);
+        drawCanvas();
+
+    })
 });
