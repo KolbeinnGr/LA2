@@ -34,8 +34,7 @@ Rectangle.prototype.render = function(checked) {
         drawio.ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
     }
     else if (!checked){
-        drawio.ctx.rect(this.position.x, this.position.y, this.width, this.height);
-        drawio.ctx.stroke();
+        drawio.ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);
     }
 
 }
