@@ -47,6 +47,7 @@
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+<!--    <script src="https://kit.fontawesome.com/fd4311f340.js" crossorigin="anonymous"></script>-->
 </head>
 <body>
     <nav class="navbar">
@@ -56,13 +57,13 @@
         <div class="icon" data-shape="star">
             <i class="fa fa-star-o" aria-hidden="true"></i>
         </div>
-
         <div class="navEle">
-            <label for="colorPick"></label><input type="color" id="colorPicker" name="color"
+            <label for="colorPicker"></label><input type="color" id="colorPicker" name="color"
                                              value="#000000">
             <input type="checkbox" id="filled" name="fill">
         </div>
         <div class="navEle"><button id="undoButton">Undo</button></div>
+        <div class="navEle"><button id="redoButton">Redo</button></div>
     </nav>
     <div class="container">
         <canvas id="my-canvas" width="800" height="600">
