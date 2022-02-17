@@ -34,7 +34,6 @@ body{
 	color: #1f1919;
 	text-align: center;
 	padding-top: 10px;
-	
 }
 
 .toolbar .type, .toolbar .size, .toolbar .color, .toolbar .actions
@@ -62,12 +61,13 @@ body{
 }
 
 /* canvasinn */
+
 .drawingBoard {
+	display: block;
 	background-color: #ffffff;
 	box-shadow: 1px 1px 1px;
 	margin: 10px auto;
-	display: block;
-	width: 80%;
-	height: 800px;
+
 }
+
 

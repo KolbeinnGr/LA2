@@ -6,7 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asignment II, Group 4</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">-->
+    <script src="https://kit.fontawesome.com/fd4311f340.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="styles.css">
 
 </head>
@@ -22,8 +23,17 @@
 
                 <input type="radio" name="sel-tool" id="square">
                 <label for="square"><i class="fa fa-square-o"></i></label>
-            </div>
 
+                <input type="radio" name="sel-tool" id="circle">
+                <label for="circle"><i class="fa fa-circle-o"></i></label>
+
+                <input type="radio" name="sel-tool" id="line">
+                <label for="line"><i class="fa fa-minus"></i></label>
+
+                <input type="radio" name="sel-tool" id="text">
+                <label for="text"><i class="fa fa-font"></i></label>
+
+            </div>
             <div class="title">Stilla útlínu</div>
             <div class="color">
                 <label for="stroke-color"></label>
@@ -38,22 +48,25 @@
             <div class="color">
                 <label for="fill-color"></label>
                 <input type="color" id="fill-color" value="#000">
+                <input type="checkbox" id="filled" name="fill" checked>
             </div>
 
             <div class="title">Aðgerðir</div>
             <div class="actions">
-                <button id="reset">Hreinsa</button>
+                <button id="clear">Hreinsa</button>
                 <button id="save">Vista</button>
+                <button id="getImg">Sækja mynd</button>
+
             </div>
         </div>
-        <canvas id="my-canvas" class="drawingBoard">
+        <canvas id="my-canvas" class="drawingBoard" width="1000" height="800">
             Not supported
         </canvas>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js" charset="utf-8"></script>
+    <script src="lib/makeBelieve.js" charset="utf-8"></script>
+    <script src="shapes.js" charset="utf-8"></script>
     <script src="app.js"></script>
-
 </body>
 
 </html>
