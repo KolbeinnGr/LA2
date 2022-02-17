@@ -13,13 +13,14 @@ Shape.prototype.move = function (position) {
 Shape.prototype.resize = function () { }
 
 
+//------ Rectangle ------//
 function Rectangle(position, width, height) {
     Shape.call(this, position);
     this.width = width;
     this.height = height;
 }
 
-// Assign the prototype
+
 Rectangle.prototype = Object.create(Shape.prototype);
 Rectangle.prototype.constructor = Rectangle;
 
@@ -47,14 +48,13 @@ Rectangle.prototype.resize = function (x, y) {
 
 
 
-
+//------ CIRCLE ------//
 function Circle(position, radius) {
     Shape.call(this, position);
 
     this.radius = radius;
 }
 
-// Assign the prototype
 Circle.prototype = Object.create(Shape.prototype);
 Circle.prototype.constructor = Circle;
 
@@ -76,6 +76,7 @@ Circle.prototype.resize = function(x, y) {
     }
 
 
+//------ LINE ------//
 function Line(position) {
     Shape.call(this, position);
     this.x = position.x
@@ -106,3 +107,39 @@ Line.prototype.resize = function(x, y) {
 }
 
 
+
+//------ TEXT ------//
+function Text(position, radius) {
+    Shape.call(this, position);
+    this.textString = "";
+
+}
+
+Text.prototype = Object.create(Shape.prototype);
+Text.prototype.constructor = Text;
+
+
+Text.prototype.render = function(checked) {
+
+    drawio.ctx.font = "30px Arial";
+
+    if (checked){
+        drawio.ctx.fillText(this.textString, this.position.x, this.position.y);
+    }
+    else{
+        drawio.ctx.strokeText(this.textString, this.position.x, this.position.y)
+    }
+
+}
+
+Text.prototype.resize = function(button) {
+    console.log(button)
+    if (button === 'Backspace'){
+        let tempString = this.textString;
+        this.textString = tempString.slice(0, -1);
+
+    }
+    else {
+        this.textString += button;
+    }
+}
