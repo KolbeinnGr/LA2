@@ -12,10 +12,10 @@ window.drawio = {
 };
 
 
-$(function() {
+$(function () {
     // Document is loaded and parsed here
 
-    function clearCanvas(){
+    function clearCanvas() {
         drawio.ctx.clearRect(0, 0, drawio.canvas.width, drawio.canvas.height);
     }
 
@@ -25,7 +25,7 @@ $(function() {
 
         }
 
-        for (let i = 0; i< drawio.shapes.length; i++){
+        for (let i = 0; i < drawio.shapes.length; i++) {
             drawio.ctx.fillStyle = drawio.shapes[i].color;
             drawio.ctx.strokeStyle = drawio.shapes[i].color;
 
@@ -46,7 +46,7 @@ $(function() {
             case drawio.availableShapes.RECTANGLE:
 
                 // console.log(document.getElementById('colorPicker').value)
-                drawio.selectedElement = new Rectangle({x: mouseEvent.offsetX, y: mouseEvent.offsetY}, 0, 0)
+                drawio.selectedElement = new Rectangle({ x: mouseEvent.offsetX, y: mouseEvent.offsetY }, 0, 0)
 
                 break;
         }
@@ -67,19 +67,17 @@ $(function() {
     });
 
     // mouseup
-    $('#my-canvas').on('mouseup', function() {
-        drawio.shapes.push({color: document.getElementById('colorPicker').value, element: drawio.selectedElement, checked: $('#filled').is(':checked')});
+    $('#my-canvas').on('mouseup', function () {
+        drawio.shapes.push({ color: document.getElementById('colorPicker').value, element: drawio.selectedElement, checked: $('#filled').is(':checked') });
         drawio.selectedElement = null;
         clearCanvas();
         drawCanvas();
         drawio.undo_stack = [];
-
-
     });
 
     // undo
-    $('#undoButton').on('click', function(){
-        if (drawio.shapes.length === 0){
+    $('#undoButton').on('click', function () {
+        if (drawio.shapes.length === 0) {
             return
         }
         drawio.undo_stack.push(drawio.shapes.pop());
@@ -88,8 +86,8 @@ $(function() {
     })
 
     //redo
-    $('#redoButton').on('click', function(){
-        if (drawio.undo_stack.length === 0){
+    $('#redoButton').on('click', function () {
+        if (drawio.undo_stack.length === 0) {
             return
         }
 

@@ -1,0 +1,73 @@
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body{
+	background-color: #1f1919;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+
+/*app*/
+
+.app{
+	position: fixed;
+
+	width: 100%;
+	height: 100%;
+}
+
+/* Toolbar */
+.toolbar{
+	position: fixed;
+	align-items: center;
+	background-color: #cccccc;
+	padding: 10px;
+	left: 10px;
+	top: 10px;
+}
+
+.toolbar .title{
+	font-weight: 700;
+	color: #1f1919;
+	text-align: center;
+	padding-top: 10px;
+	
+}
+
+.toolbar .type, .toolbar .size, .toolbar .color, .toolbar .actions
+{
+	margin: 10px;
+}
+
+.toolbar .type input {
+	display: none;
+}
+
+.toolbar .type label {
+	width: 30px;
+	height: 30px;
+	display: inline-block;
+	text-align: center;
+	line-height: 30px;
+	margin: 0 2px;
+	cursor: pointer;
+}
+
+.toolbar .type input:checked + label {
+	background-color: #dddddd;
+	border-radius: 50%;
+}
+
+/* canvasinn */
+.drawingBoard {
+	background-color: #ffffff;
+	box-shadow: 1px 1px 1px;
+	margin: 10px auto;
+	display: block;
+	width: 80%;
+	height: 800px;
+}
+
