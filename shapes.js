@@ -3,7 +3,7 @@
 function Shape(position) {
     this.position = position;
     drawio.ctx.strokeStyle = drawio.strokeColor;
-    console.log(drawio.ctx.strokeStyle, drawio.strokeColor)
+    // console.log(drawio.ctx.strokeStyle, drawio.strokeColor)
 }
 
 Shape.prototype.render = function () { }

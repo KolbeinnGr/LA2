@@ -35,10 +35,6 @@ function drawCanvas() {
 		drawio.ctx.strokeStyle = shape.strokeColor;
 		drawio.ctx.lineWidth = shape.strokeSize;
 
-
-		//drawio.ctx.fillStyle = drawio.shapes[i].fillStyle;	
-		//drawio.ctx.strokeStyle = drawio.shapes[i].strokeStyle;
-		console.log(drawio.shapes[i].fill)
 		drawio.shapes[i].element.render(drawio.shapes[i]);
 
 	}
@@ -78,7 +74,7 @@ function startDrawing(evt) {
 			drawio.selectedElement = new Rectangle(drawio.lastPos, 0, 0);
 			break;
 		case drawio.availableTools.CIRCLE:
-			console.log("völudm circle")
+
 			drawio.selectedElement = new Circle(drawio.lastPos, 0);
 			break;
 		case drawio.availableTools.LINE:
