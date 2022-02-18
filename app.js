@@ -41,10 +41,12 @@ function drawCanvas() {
 
 	if (drawio.selectedElement) {
 		drawio.selectedElement.render(
-			{strokeColor: drawio.strokeColor,
+			{
+				strokeColor: drawio.strokeColor,
 				strokeSize: drawio.strokeSize,
 				fillColor: drawio.fillColor,
-				fill: drawio.fill});
+				fill: drawio.fill
+			});
 	}
 }
 
@@ -148,21 +150,25 @@ __('#stroke-size').on('change', function () {
 	drawio.ctx.lineWidth = this.value;
 })
 
-__('#filled').on('change', function(){
+
+
+__('#fill-color').on('change', function () {
 	drawio.fillColor = this.value;
 	drawio.ctx.fillStyle = this.value;
+})
+__('#filled').on('change', function () {
 	drawio.fill = !drawio.fill;
 })
 
 
-__('#undo').on('click', function(){
+__('#undo').on('click', function () {
 	if (drawio.shapes.length === 0) return;
 	drawio.undo_stack.push(drawio.shapes.pop());
 	clearCanvas();
 	drawCanvas();
 })
 
-__('#redo').on('click', function(){
+__('#redo').on('click', function () {
 	if (drawio.undo_stack.length === 0) return;
 	clearCanvas();
 	drawio.shapes.push(drawio.undo_stack.pop())
