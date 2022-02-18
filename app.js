@@ -44,7 +44,11 @@ function drawCanvas() {
 	}
 
 	if (drawio.selectedElement) {
-		drawio.selectedElement.render(false);
+		drawio.selectedElement.render(
+			{strokeColor: drawio.strokeColor,
+				strokeSize: drawio.strokeSize,
+				fillColor: drawio.fillColor,
+				fill: drawio.fill});
 	}
 }
 
@@ -151,11 +155,9 @@ __('#stroke-size').on('change', function () {
 __('#filled').on('change', function(){
 	drawio.fillColor = this.value;
 	drawio.ctx.fillStyle = this.value;
+	drawio.fill = !drawio.fill;
 })
 
-__('#filled').on('change', function(){
-	drawio.ctx.fill = !drawio.ctx.fill;
-})
 
 __('#undo').on('click', function(){
 	if (drawio.shapes.length === 0) return;
