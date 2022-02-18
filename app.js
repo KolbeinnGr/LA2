@@ -125,6 +125,15 @@ function draw(evt) {
 
 __('#save').on('click', function () {
 	console.log("save stuff")
+	let json = JSON.stringify(drawio.shapes);
+	let blob = new Blob([json], {type: "application/json"});
+	let url = URL.createObjectURL(blob);
+	let a = document.createElement('a');
+	a.download = 'save_file.json';
+	a.href = url;
+	a.textcontent = "Save json";
+	a.click();
+
 });
 __('#getImg').on('click', function () {
 	downLoadImg()
@@ -160,6 +169,10 @@ __('#filled').on('change', function () {
 	drawio.fill = !drawio.fill;
 })
 
+__('#submitButton').on('change', function(){
+	drawio.shapes = this.file
+	console.log(drawio.shapes)
+})
 
 __('#undo').on('click', function () {
 	if (drawio.shapes.length === 0) return;
