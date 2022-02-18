@@ -169,9 +169,19 @@ __('#filled').on('change', function () {
 	drawio.fill = !drawio.fill;
 })
 
-__('#submitButton').on('change', function(){
-	drawio.shapes = this.file
-	console.log(drawio.shapes)
+__('#submitButton').on('click', function(){
+	let fileToLoad = document.getElementById('myFile').files[0]
+
+	const fileReader = new FileReader();
+	fileReader.onload = function(fileLoadedEvent){
+		let textFromFileLoaded = fileLoadedEvent.target.result;
+		drawio.shapes = JSON.parse(textFromFileLoaded);
+		console.log(drawio.shapes)
+	}
+
+	fileReader.readAsText(fileToLoad, "UTF-8");
+	clearCanvas();
+	drawCanvas();
 })
 
 __('#undo').on('click', function () {
