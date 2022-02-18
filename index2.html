@@ -37,7 +37,7 @@
             <div class="title">Stilla útlínu</div>
             <div class="color">
                 <label for="stroke-color"></label>
-                <input type="color" id="stroke-color" value="#000">
+                <input type="color" id="stroke-color" value="#000000">
             </div>
             <div class="size">
                 <label for="stroke-size"></label>
@@ -47,15 +47,21 @@
             <div class="title">Stilla fyllingu</div>
             <div class="color">
                 <label for="fill-color"></label>
-                <input type="color" id="fill-color" value="#000">
+                <input type="color" id="fill-color" value="#ff0000">
                 <input type="checkbox" id="filled" name="fill" checked>
             </div>
 
             <div class="title">Aðgerðir</div>
             <div class="actions">
-                <button id="clear">Hreinsa</button>
-                <button id="save">Vista</button>
-                <button id="getImg">Sækja mynd</button>
+                <div class="action-row">
+                    <button id="undo">Afturkalla</button>
+                    <button id="redo">Endurgera</button>
+                </div>
+                <div class="action-row">
+                    <button id="clear">Hreinsa</button>
+                    <button id="save">Vista</button>
+                    <button id="getImg">Sækja mynd</button>
+                </div>
 
             </div>
         </div>

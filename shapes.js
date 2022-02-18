@@ -32,13 +32,16 @@ Rectangle.prototype.render = function (checked) {
     //    checked = $('#filled').is(':checked');
     //}
 
-    if (checked) {
-        // console.log(checked)
-        drawio.ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
-    }
-    else if (!checked) {
-        drawio.ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);
-    }
+    // if (checked) {
+    //     // console.log(checked)
+    //     drawio.ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+    // }
+    // else if (!checked) {
+    //     drawio.ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);
+    // }
+
+    drawio.ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);
+
 
 }
 
@@ -53,7 +56,6 @@ Rectangle.prototype.resize = function (x, y) {
 //------ CIRCLE ------//
 function Circle(position, radius) {
     Shape.call(this, position);
-
     this.radius = radius;
 }
 
@@ -67,9 +69,9 @@ Circle.prototype.render = function (checked) {
     drawio.ctx.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI)
     drawio.ctx.stroke();
 
-    if (checked) {
-        drawio.ctx.fill();
-    }
+    // if (checked) {
+    //     drawio.ctx.fill();
+    // }
 
 }
 
@@ -158,16 +160,29 @@ Pen.prototype = Object.create(Shape.prototype);
 Pen.prototype.constructor = Pen;
 
 
+// Pen.prototype.render = function () {
+//     drawio.ctx.beginPath();
+//     let coord = this.pointList[0];
+//     drawio.ctx.moveTo(coord.x, coord.y);
+//     this.pointList.forEach(coord => {
+//         drawio.ctx.lineTo(coord.x, coord.y);
+//     });
+//     drawio.ctx.stroke();
+//     drawio.ctx.closePath();
+// }
 Pen.prototype.render = function () {
     drawio.ctx.beginPath();
-    let coord = this.pointList[0];
-    drawio.ctx.moveTo(coord.x, coord.y);
+    let coord2 = this.pointList[0];
     this.pointList.forEach(coord => {
+        drawio.ctx.moveTo(coord2.x, coord2.y)
         drawio.ctx.lineTo(coord.x, coord.y);
+        coord2 = coord;
+
     });
     drawio.ctx.stroke();
     drawio.ctx.closePath();
 }
+
 
 Pen.prototype.resize = function (x, y) {
     if (x !== this.endX || y !== this.endY) {
@@ -183,7 +198,7 @@ Pen.prototype.resize = function (x, y) {
     drawio.ctx.closePath();
     this.endX = x;
     this.endY = y;
-    console.log({ x: x, y: y })
+
     this.pointList.push({ x: x, y: y })
-    console.log(this.pointList.length)
+
 }

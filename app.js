@@ -38,11 +38,13 @@ function drawCanvas() {
 
 		//drawio.ctx.fillStyle = drawio.shapes[i].fillStyle;	
 		//drawio.ctx.strokeStyle = drawio.shapes[i].strokeStyle;
-		drawio.shapes[i].element.render();
+		console.log(drawio.shapes[i].fill)
+		drawio.shapes[i].element.render(drawio.shapes[i]);
+
 	}
 
 	if (drawio.selectedElement) {
-		drawio.selectedElement.render();
+		drawio.selectedElement.render(false);
 	}
 }
 
@@ -99,7 +101,7 @@ function stopDrawing() {
 		strokeSize: drawio.strokeSize,
 		fillColor: drawio.fillColor,
 		fill: drawio.fill,
-		element: drawio.selectedElement, checked: false//$('#filled').is(':checked')
+		element: drawio.selectedElement, checked: drawio.fill
 	});
 	drawio.selectedElement = null;
 	clearCanvas();
@@ -111,6 +113,7 @@ function draw(evt) {
 	if (!drawio.isDrawing || drawio.selectedTool === 'text') return;
 	let pos = getMouseXY(evt);
 	drawio.selectedElement.resize(pos.x, pos.y);
+	if (drawio.selectedTool === 'pen') return;
 	clearCanvas();
 	drawCanvas();
 }
@@ -135,21 +138,45 @@ __('.type input').on("change", function () {
 	drawio.selectedTool = this.id;
 })
 
-
 __('#stroke-color').on("change", function () {
 	drawio.strokeColor = this.value;
 	drawio.ctx.strokeStyle = this.value;
 })
 
+__('#stroke-size').on('change', function () {
+	drawio.strokeSize = this.value;
+	drawio.ctx.lineWidth = this.value;
+})
+
+__('#filled').on('change', function(){
+	drawio.fillColor = this.value;
+	drawio.ctx.fillStyle = this.value;
+})
+
+__('#filled').on('change', function(){
+	drawio.ctx.fill = !drawio.ctx.fill;
+})
+
+__('#undo').on('click', function(){
+	if (drawio.shapes.length === 0) return;
+	drawio.undo_stack.push(drawio.shapes.pop());
+	clearCanvas();
+	drawCanvas();
+})
+
+__('#redo').on('click', function(){
+	if (drawio.undo_stack.length === 0) return;
+	clearCanvas();
+	drawio.shapes.push(drawio.undo_stack.pop())
+	drawCanvas();
+})
 
 __('.drawingBoard').on('mousedown', function (mouseEvent) {
 	startDrawing(mouseEvent);
-
 });
 
 __('.drawingBoard').on('mouseup', function (mouseEvent) {
 	stopDrawing();
-
 });
 
 __('.drawingBoard').on('mousemove', function (mouseEvent) {
