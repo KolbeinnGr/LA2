@@ -151,6 +151,11 @@ __('#submitButton').on('click', function(){
 
 			drawio.selectedTool = ele.selectedTool
 			startDrawing({offsetX: ele.element.offsetX, offsetY: ele.element.offsetY})
+
+			for (let prop in ele.element) {
+				drawio.selectedElement[prop] = ele.element[prop];
+
+			}
 			drawio.shapes.push({
 				strokeColor: ele.strokeColor,
 				strokeSize: ele.strokeSize,
@@ -160,7 +165,7 @@ __('#submitButton').on('click', function(){
 				selectedTool: ele.selectedTool
 			});
 			drawio.selectedElement = null;
-			console.log(ele.element)
+
 		});
 		console.log(drawio.shapes)
 		clearCanvas();
