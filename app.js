@@ -34,7 +34,7 @@ function drawCanvas() {
 		drawio.ctx.fillStyle = shape.fillColor;
 		drawio.ctx.strokeStyle = shape.strokeColor;
 		drawio.ctx.lineWidth = shape.strokeSize;
-
+		// console.log(drawio.shapes[i].element)
 		drawio.shapes[i].element.render(drawio.shapes[i]);
 
 	}
@@ -76,7 +76,6 @@ function startDrawing(evt) {
 			drawio.selectedElement = new Rectangle(drawio.lastPos, 0, 0);
 			break;
 		case drawio.availableTools.CIRCLE:
-
 			drawio.selectedElement = new Circle(drawio.lastPos, 0);
 			break;
 		case drawio.availableTools.LINE:
@@ -103,13 +102,15 @@ function stopDrawing() {
 		strokeSize: drawio.strokeSize,
 		fillColor: drawio.fillColor,
 		fill: drawio.fill,
-		element: drawio.selectedElement, checked: drawio.fill
+		element: drawio.selectedElement, checked: drawio.fill,
+		selectedTool: drawio.selectedTool
 	});
 	drawio.selectedElement = null;
 	clearCanvas();
 	drawCanvas();
 	drawio.undo_stack = [];
-};
+	console.log(drawio.shapes)
+}
 
 function draw(evt) {
 	if (!drawio.isDrawing || drawio.selectedTool === 'text') return;
@@ -123,6 +124,7 @@ function draw(evt) {
 
 /*Events*/
 
+// SAVE TO FILE
 __('#save').on('click', function () {
 	console.log("save stuff")
 	let json = JSON.stringify(drawio.shapes);
@@ -133,8 +135,61 @@ __('#save').on('click', function () {
 	a.href = url;
 	a.textcontent = "Save json";
 	a.click();
-
 });
+
+// LOAD FROM FILE
+__('#submitButton').on('click', function(){
+	let fileToLoad = document.getElementById('myFile').files[0]
+
+	const fileReader = new FileReader();
+	fileReader.onload = function(fileLoadedEvent){
+		let textFromFileLoaded = fileLoadedEvent.target.result;
+		let parsed = JSON.parse(textFromFileLoaded);
+
+
+		parsed.forEach( ele => {
+
+			drawio.selectedTool = ele.selectedTool
+			startDrawing({offsetX: ele.element.offsetX, offsetY: ele.element.offsetY})
+			drawio.shapes.push({
+				strokeColor: ele.strokeColor,
+				strokeSize: ele.strokeSize,
+				fillColor: ele.fillColor,
+				fill: ele.fill,
+				element: drawio.selectedElement, checked: drawio.fill,
+				selectedTool: ele.selectedTool
+			});
+			drawio.selectedElement = null;
+			console.log(ele.element)
+		});
+		console.log(drawio.shapes)
+		clearCanvas();
+		drawCanvas();
+		drawio.undo_stack = [];
+
+	}
+
+	fileReader.readAsText(fileToLoad, "UTF-8");
+})
+
+//BACKUP AF LOAD FROM FILE
+// __('#submitButton').on('click', function(){
+// 	let fileToLoad = document.getElementById('myFile').files[0]
+//
+// 	const fileReader = new FileReader();
+// 	fileReader.onload = function(fileLoadedEvent){
+// 		let textFromFileLoaded = fileLoadedEvent.target.result;
+// 		drawio.shapes = JSON.parse(textFromFileLoaded);
+// 		console.log(drawio.shapes)
+// 		clearCanvas();
+// 		drawCanvas();
+// 	}
+//
+// 	fileReader.readAsText(fileToLoad, "UTF-8");
+//
+// })
+
+
 __('#getImg').on('click', function () {
 	downLoadImg()
 });
@@ -169,20 +224,7 @@ __('#filled').on('change', function () {
 	drawio.fill = !drawio.fill;
 })
 
-__('#submitButton').on('click', function(){
-	let fileToLoad = document.getElementById('myFile').files[0]
 
-	const fileReader = new FileReader();
-	fileReader.onload = function(fileLoadedEvent){
-		let textFromFileLoaded = fileLoadedEvent.target.result;
-		drawio.shapes = JSON.parse(textFromFileLoaded);
-		console.log(drawio.shapes)
-	}
-
-	fileReader.readAsText(fileToLoad, "UTF-8");
-	clearCanvas();
-	drawCanvas();
-})
 
 __('#undo').on('click', function () {
 	if (drawio.shapes.length === 0) return;
