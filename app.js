@@ -34,7 +34,7 @@ function drawCanvas() {
 		drawio.ctx.fillStyle = shape.fillColor;
 		drawio.ctx.strokeStyle = shape.strokeColor;
 		drawio.ctx.lineWidth = shape.strokeSize;
-		// console.log(drawio.shapes[i].element)
+
 		drawio.shapes[i].element.render(drawio.shapes[i]);
 
 	}
@@ -146,9 +146,8 @@ __('#submitButton').on('click', function(){
 		let textFromFileLoaded = fileLoadedEvent.target.result;
 		let parsed = JSON.parse(textFromFileLoaded);
 
-
+		drawio.shapes = [];
 		parsed.forEach( ele => {
-
 			drawio.selectedTool = ele.selectedTool
 			startDrawing({offsetX: ele.element.offsetX, offsetY: ele.element.offsetY})
 
@@ -167,7 +166,7 @@ __('#submitButton').on('click', function(){
 			drawio.selectedElement = null;
 
 		});
-		console.log(drawio.shapes)
+
 		clearCanvas();
 		drawCanvas();
 		drawio.undo_stack = [];
