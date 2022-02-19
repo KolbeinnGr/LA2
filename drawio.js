@@ -27,7 +27,7 @@ $(function() {
             drawio.selectedElement.render();
         }
         for (let i = 0; i< drawio.shapes.length; i++){
-            i
+
             drawio.ctx.fillStyle = drawio.shapes[i].color;
             drawio.ctx.strokeStyle = drawio.shapes[i].color;
             drawio.shapes[i].element.render(drawio.shapes[i].checked);

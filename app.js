@@ -83,6 +83,7 @@ function startDrawing(evt) {
 			break;
 		case drawio.availableTools.TEXT:
 			drawio.selectedElement = new Text(drawio.lastPos);
+			__('#textBox').css('visibility', 'visible').css('top', evt.clientY +'px').css('left', evt.clientX +'px');
 			break;
 		case drawio.availableTools.PEN:
 			drawio.selectedElement = new Pen(drawio.lastPos);
@@ -92,11 +93,11 @@ function startDrawing(evt) {
 
 function stopDrawing() {
 	if (!drawio.isDrawing) return;
-
-	drawio.isDrawing = false;
 	if (drawio.selectedTool === 'text') {
 		return
 	}
+	drawio.isDrawing = false;
+
 	drawio.shapes.push({
 		strokeColor: drawio.strokeColor,
 		strokeSize: drawio.strokeSize,
@@ -176,23 +177,6 @@ __('#submitButton').on('click', function(){
 	fileReader.readAsText(fileToLoad, "UTF-8");
 })
 
-//BACKUP AF LOAD FROM FILE
-// __('#submitButton').on('click', function(){
-// 	let fileToLoad = document.getElementById('myFile').files[0]
-//
-// 	const fileReader = new FileReader();
-// 	fileReader.onload = function(fileLoadedEvent){
-// 		let textFromFileLoaded = fileLoadedEvent.target.result;
-// 		drawio.shapes = JSON.parse(textFromFileLoaded);
-// 		console.log(drawio.shapes)
-// 		clearCanvas();
-// 		drawCanvas();
-// 	}
-//
-// 	fileReader.readAsText(fileToLoad, "UTF-8");
-//
-// })
-
 
 __('#getImg').on('click', function () {
 	downLoadImg()
@@ -219,7 +203,6 @@ __('#stroke-size').on('change', function () {
 })
 
 
-
 __('#fill-color').on('change', function () {
 	drawio.fillColor = this.value;
 	drawio.ctx.fillStyle = this.value;
@@ -227,7 +210,6 @@ __('#fill-color').on('change', function () {
 __('#filled').on('change', function () {
 	drawio.fill = !drawio.fill;
 })
-
 
 
 __('#undo').on('click', function () {
@@ -249,9 +231,36 @@ __('.drawingBoard').on('mousedown', function (mouseEvent) {
 });
 
 __('.drawingBoard').on('mouseup', function (mouseEvent) {
+	if (drawio.selectedTool === 'text' || !drawio.isDrawing) return;
+	console.log(drawio.selectedElement)
 	stopDrawing();
 });
 
 __('.drawingBoard').on('mousemove', function (mouseEvent) {
+	if (drawio.selectedTool === 'text' || !drawio.isDrawing) return;
+	console.log(drawio.selectedElement)
 	draw(mouseEvent);
 });
+
+// On Enter
+__('#textBox').on('keydown', function(e){
+
+	if (drawio.selectedTool === 'text') {
+		if (e.key === 'Enter') {
+			drawio.selectedElement.textString = document.getElementById('textBox').value
+			drawio.shapes.push({
+				strokeColor: drawio.strokeColor,
+				strokeSize: drawio.strokeSize,
+				fillColor: drawio.fillColor,
+				fill: drawio.fill,
+				element: drawio.selectedElement, checked: drawio.fill,
+				selectedTool: drawio.selectedTool
+			});
+			drawio.selectedElement = null;
+			drawio.undo_stack = [];
+
+			__('#textBox').css('visibility','hidden')[0].value = ""
+		}
+		clearCanvas()
+		drawCanvas();
+	}})

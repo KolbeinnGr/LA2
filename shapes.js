@@ -106,7 +106,7 @@ Line.prototype.resize = function (x, y) {
 
 
 //------ TEXT ------//
-function Text(position, radius) {
+function Text(position) {
     Shape.call(this, position);
     this.textString = "";
 
@@ -129,15 +129,15 @@ Text.prototype.render = function (checked) {
 }
 
 Text.prototype.resize = function (button) {
-    console.log(button)
-    if (button === 'Backspace') {
-        let tempString = this.textString;
-        this.textString = tempString.slice(0, -1);
-
-    }
-    else {
-        this.textString += button;
-    }
+    // console.log(button)
+    // if (button === 'Backspace') {
+    //     let tempString = this.textString;
+    //     this.textString = tempString.slice(0, -1);
+    //
+    // }
+    // else {
+    //     this.textString += button;
+    // }
 }
 
 //------ PEN ------//
