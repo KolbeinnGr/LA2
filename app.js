@@ -170,7 +170,7 @@ __('#submitButton').on('click', function(){
 		clearCanvas();
 		drawCanvas();
 		drawio.undo_stack = [];
-
+		document.getElementById('myFile').value = '';
 	}
 
 	fileReader.readAsText(fileToLoad, "UTF-8");
