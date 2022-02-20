@@ -124,9 +124,11 @@ Text.prototype.render = function (shape) {
 
     if (shape.fill) {
         drawio.ctx.fillText(this.textString, this.position.x, this.position.y);
+        // console.log(drawio.ctx.measureText(this.textString));
     }
     if (shape.stroke) {
         drawio.ctx.strokeText(this.textString, this.position.x, this.position.y)
+        // drawio.ctx.measureText(this.textString);
     }
 }
 
@@ -167,6 +169,7 @@ Pen.prototype.constructor = Pen;
 //     drawio.ctx.stroke();
 //     drawio.ctx.closePath();
 // }
+
 Pen.prototype.render = function () {
     drawio.ctx.beginPath();
     let coord2 = this.pointList[0];
@@ -180,7 +183,6 @@ Pen.prototype.render = function () {
     drawio.ctx.stroke();
     drawio.ctx.closePath();
 }
-
 
 Pen.prototype.resize = function (x, y) {
     if (x !== this.endX || y !== this.endY) {

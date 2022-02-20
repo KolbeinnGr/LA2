@@ -110,8 +110,9 @@ function startDrawing(evt) {
 			break;
 		case drawio.availableTools.MOVE:
 			//drawio.selectedElement = null;
-			for (var i = 0; i < drawio.shapes.length; i++) {
-				if (isInShape(drawio.shapes[i].element)) {
+			for (let i = drawio.shapes.length - 1; i >= 0; i--) {
+				if (isInShape(drawio.shapes[i])) {
+					console.log('þetta fór inn')
 					drawio.dragStartPos.x = drawio.lastPos.x - drawio.shapes[i].element.position.x;
 					drawio.dragStartPos.y = drawio.lastPos.y - drawio.shapes[i].element.position.y;
 					drawio.selectedElement = drawio.shapes[i].element;
@@ -119,7 +120,6 @@ function startDrawing(evt) {
 					//	return;
 					break;
 				}
-
 			}
 			break;
 	}
@@ -128,25 +128,39 @@ function startDrawing(evt) {
 
 function isInShape(shape) {
 
+	let element = shape.element
 	let mouseX = drawio.lastPos.x;
 	let mouseY = drawio.lastPos.y;
-	let eleX = shape.position.x;
-	let eleY = shape.position.y;
-	console.log("---->" + shape.radius);
-	if (shape.radius) {
-		console.log("hringur")
+	let eleX = element.position.x;
+	let eleY = element.position.y;
+	console.log("---->" + element);
+	if (shape.selectedTool === drawio.availableTools.CIRCLE) {
+		console.log(element.radius)
 		var dx = mouseX - eleX;
 		var dy = mouseY - eleY;
-		if (dx * dx + dy * dy < shape.radius * shape.radius) {
+		if (dx * dx + dy * dy < element.radius * element.radius) {
 			return (true);
 		}
-	} else if (shape.width) {
-		console.log("skoða kassa", shape.width, shape.height);
+	} else if (shape.selectedTool === drawio.availableTools.RECTANGLE) {
+		console.log("skoða kassa", element.width, element.height);
 
 		var rLeft = eleX;
-		var rRight = eleX + shape.width;
+		var rRight = eleX + element.width;
 		var rTop = eleY;
-		var rBott = eleY + shape.height;
+		var rBott = eleY + element.height;
+		if (mouseX > rLeft && mouseX < rRight && mouseY > rTop && mouseY < rBott) {
+			return (true);
+		}
+	} else if (shape.selectedTool === drawio.availableTools.PEN){
+
+	} else if (shape.selectedTool === drawio.availableTools.LINE){
+		console.log(shape)
+	} else if (shape.selectedTool === drawio.availableTools.TEXT){
+
+		var rLeft = eleX;
+		var rRight = eleX + drawio.ctx.measureText(element.textString).width;
+		var rTop = eleY - drawio.ctx.measureText(element.textString).fontBoundingBoxAscent;
+		var rBott = eleY + drawio.ctx.measureText(element.textString).fontBoundingBoxDescent;
 		if (mouseX > rLeft && mouseX < rRight && mouseY > rTop && mouseY < rBott) {
 			return (true);
 		}
@@ -227,7 +241,6 @@ function drawText(e) {
 	clearCanvas();
 	drawCanvas();
 
-
 }
 
 function loadFile() {
@@ -262,7 +275,6 @@ function loadFile() {
 		drawio.undo_stack = [];
 		document.getElementById('myFile').value = '';
 	}
-
 	fileReader.readAsText(fileToLoad, "UTF-8");
 }
 
