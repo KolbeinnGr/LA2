@@ -17,6 +17,9 @@
         <div class="toolbar">
             <div class="title">Tólastika</div>
             <div class="type">
+                <input type="radio" name="sel-tool" id="move">
+                <label for="move"><i class="fa-solid fa-arrows-up-down-left-right"></i></label>
+
                 <input type="radio" name="sel-tool" id="pen" checked>
                 <label for="pen"><i class="fa fa-pencil"></i></label>
 
@@ -31,6 +34,7 @@
 
                 <input type="radio" name="sel-tool" id="text">
                 <label for="text"><i class="fa fa-font"></i></label>
+
             </div>
             <div class="title">Stilla útlínu</div>
             <div class="color">
@@ -47,9 +51,12 @@
                 <label for="fill-color"></label>
                 <input type="color" id="fill-color" value="#ff0000">
                 <i class="fa-solid fa-fill" title="Settu hak hér ef þú vilt að það sem þú teiknar sé með fyllingu."></i>
-                <label for="filled"></label><input type="checkbox" id="filled" name="fill" checked title="Settu hak hér ef þú vilt að það sem þú teiknar sé með fyllingu.">
-                <i class="fa-solid fa-square" title="Settu hak hér ef þú vilt hafa sama lit fyrir útlínu og fyllingu."></i>
-                <label for="sameColorOutline"></label><input type="checkbox" id="sameColorOutline" name="stroke-same-as-fill"  title="Settu hak hér ef þú vilt hafa sama lit fyrir útlínu og fyllingu.">
+                <label for="filled"></label><input type="checkbox" id="filled" name="fill" checked
+                    title="Settu hak hér ef þú vilt að það sem þú teiknar sé með fyllingu.">
+                <i class="fa-solid fa-square"
+                    title="Settu hak hér ef þú vilt hafa sama lit fyrir útlínu og fyllingu."></i>
+                <label for="sameColorOutline"></label><input type="checkbox" id="sameColorOutline"
+                    name="stroke-same-as-fill" title="Settu hak hér ef þú vilt hafa sama lit fyrir útlínu og fyllingu.">
             </div>
 
             <div class="title">Aðgerðir</div>

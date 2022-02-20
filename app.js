@@ -10,9 +10,13 @@ let drawio = {
 		CIRCLE: 'circle',
 		LINE: 'line',
 		TEXT: 'text',
-		PEN: 'pen'
+		PEN: 'pen',
+		MOVE: 'move'
 	},
-	isDrawing: false, currPos: {},
+	isDrawing: false,
+	isDragging: false,
+	lastPos: {},
+	dragStartPos: {},
 	strokeSize: 10,
 	strokeColor: "#000000",
 	stroke: true,
@@ -34,13 +38,10 @@ function drawCanvas() {
 	let shape;
 	for (let i = 0; i < drawio.shapes.length; i++) {
 		shape = drawio.shapes[i];
-
 		drawio.ctx.fillStyle = shape.fillColor;
 		drawio.ctx.strokeStyle = shape.strokeColor;
 		drawio.ctx.lineWidth = shape.strokeSize;
-
 		drawio.shapes[i].element.render(drawio.shapes[i]);
-
 	}
 
 	if (drawio.selectedElement) {
@@ -60,13 +61,13 @@ function getMouseXY(evt) {
 	return { x: evt.offsetX, y: evt.offsetY }
 }
 
-function hideTextBox(){
+function hideTextBox() {
 	__('#textBox')[0].value = ""
-	__('#textDiv').css('visibility','hidden')
+	__('#textDiv').css('visibility', 'hidden')
 }
 
-function showTextBox(evt){
-	__('#textDiv').css('visibility', 'visible').css('top', evt.clientY +'px').css('left', evt.clientX +'px');
+function showTextBox(evt) {
+	__('#textDiv').css('visibility', 'visible').css('top', evt.clientY + 'px').css('left', evt.clientX + 'px');
 }
 
 
@@ -83,8 +84,10 @@ function downLoadImg() {
 
 
 function startDrawing(evt) {
+
 	drawio.lastPos = getMouseXY(evt);
 	drawio.isDrawing = true;
+	drawio.isDragging = false;
 	switch (drawio.selectedTool) {
 		case drawio.availableTools.RECTANGLE:
 			drawio.selectedElement = new Rectangle(drawio.lastPos, 0, 0);
@@ -98,23 +101,67 @@ function startDrawing(evt) {
 		case drawio.availableTools.TEXT:
 			drawio.selectedElement = new Text(drawio.lastPos);
 			// TODO skoða hvort þetta eigi ekki heima á betri stað. lítur asnalega út að hafa þetta hér.
-			if(evt.offsetX && evt.offsetY){
+			if (evt.offsetX && evt.offsetY) {
 				showTextBox(evt)
 			}
 			break;
 		case drawio.availableTools.PEN:
 			drawio.selectedElement = new Pen(drawio.lastPos);
 			break;
+		case drawio.availableTools.MOVE:
+			//drawio.selectedElement = null;
+			for (var i = 0; i < drawio.shapes.length; i++) {
+				if (isInShape(drawio.shapes[i].element)) {
+					drawio.dragStartPos.x = drawio.lastPos.x - drawio.shapes[i].element.position.x;
+					drawio.dragStartPos.y = drawio.lastPos.y - drawio.shapes[i].element.position.y;
+					drawio.selectedElement = drawio.shapes[i].element;
+					drawio.isDragging = true;
+					//	return;
+					break;
+				}
+
+			}
+			break;
 	}
 }
 
+
+function isInShape(shape) {
+
+	let mouseX = drawio.lastPos.x;
+	let mouseY = drawio.lastPos.y;
+	let eleX = shape.position.x;
+	let eleY = shape.position.y;
+	console.log("---->" + shape.radius);
+	if (shape.radius) {
+		console.log("hringur")
+		var dx = mouseX - eleX;
+		var dy = mouseY - eleY;
+		if (dx * dx + dy * dy < shape.radius * shape.radius) {
+			return (true);
+		}
+	} else if (shape.width) {
+		console.log("skoða kassa", shape.width, shape.height);
+
+		var rLeft = eleX;
+		var rRight = eleX + shape.width;
+		var rTop = eleY;
+		var rBott = eleY + shape.height;
+		if (mouseX > rLeft && mouseX < rRight && mouseY > rTop && mouseY < rBott) {
+			return (true);
+		}
+	}
+
+	return (false);
+}
+
+
 function stopDrawing() {
-	if (!drawio.isDrawing) return;
-	if (drawio.selectedTool === 'text') {
+	if (!drawio.isDrawing || drawio.selectedTool === drawio.availableTools.TEXT) {
 		return
 	}
-	drawio.isDrawing = false;
 
+	drawio.isDrawing = false;
 	drawio.shapes.push({
 		strokeColor: drawio.strokeColor,
 		strokeSize: drawio.strokeSize,
@@ -124,23 +171,39 @@ function stopDrawing() {
 		selectedTool: drawio.selectedTool,
 		stroke: drawio.stroke
 	});
+
 	drawio.selectedElement = null;
 	clearCanvas();
 	drawCanvas();
 	drawio.undo_stack = [];
-	console.log(drawio.shapes)
+}
+
+function stopDraging() {
+	drawio.isDrawing = false;
+	drawio.isDragging = false;
+	drawio.selectedElement = null;
+	clearCanvas();
+	drawCanvas();
+	drawio.undo_stack = [];
 }
 
 function draw(evt) {
-	if (!drawio.isDrawing || drawio.selectedTool === 'text') return;
+	if (!drawio.isDrawing || drawio.selectedTool === drawio.availableTools.TEXT || (!drawio.isDragging && drawio.selectedTool === drawio.availableTools.MOVE)) return;
 	let pos = getMouseXY(evt);
-	drawio.selectedElement.resize(pos.x, pos.y);
+
+	if (drawio.isDragging && drawio.selectedTool === drawio.availableTools.MOVE) {
+		drawio.selectedElement.position.x = pos.x - drawio.dragStartPos.x;
+		drawio.selectedElement.position.y = pos.y - drawio.dragStartPos.y;
+	} else {
+		drawio.selectedElement.resize(pos.x, pos.y);
+	}
+
 	if (drawio.selectedTool === 'pen') return;
 	clearCanvas();
 	drawCanvas();
 }
 
-function drawText(e){
+function drawText(e) {
 	drawio.fontSize = __('#fontSize')[0].value
 
 	drawio.selectedElement.textString = document.getElementById('textBox').value
@@ -167,18 +230,18 @@ function drawText(e){
 
 }
 
-function loadFile(){
+function loadFile() {
 	let fileToLoad = document.getElementById('myFile').files[0]
 
 	const fileReader = new FileReader();
-	fileReader.onload = function(fileLoadedEvent){
+	fileReader.onload = function (fileLoadedEvent) {
 		let textFromFileLoaded = fileLoadedEvent.target.result;
 		let parsed = JSON.parse(textFromFileLoaded);
 
 		drawio.shapes = [];
-		parsed.forEach( ele => {
+		parsed.forEach(ele => {
 			drawio.selectedTool = ele.selectedTool
-			startDrawing({offsetX: ele.element.offsetX, offsetY: ele.element.offsetY})
+			startDrawing({ offsetX: ele.element.offsetX, offsetY: ele.element.offsetY })
 
 			for (let prop in ele.element) {
 				drawio.selectedElement[prop] = ele.element[prop];
@@ -201,12 +264,12 @@ function loadFile(){
 	}
 
 	fileReader.readAsText(fileToLoad, "UTF-8");
-	}
+}
 
-function saveFile(){
+function saveFile() {
 	console.log("save stuff")
 	let json = JSON.stringify(drawio.shapes);
-	let blob = new Blob([json], {type: "application/json"});
+	let blob = new Blob([json], { type: "application/json" });
 	let url = URL.createObjectURL(blob);
 	let a = document.createElement('a');
 	a.download = 'save_file.json';
@@ -224,23 +287,26 @@ __('#save').on('click', function () {
 });
 
 // LOAD FROM FILE
-__('#submitButton').on('click', function() {
+__('#submitButton').on('click', function () {
 	loadFile();
 })
 
+// DOWNLOAD FILE
 __('#getImg').on('click', function () {
 	downLoadImg()
 });
 
+// CLEAR CANVAS
 __('#clear').onClick(function () {
 	clearCanvas();
 	drawio.shapes = [];
 });
 
+//SELECT TOOL
 __('.type input').on("change", function () {
 	console.log("tool selected")
 	drawio.selectedTool = this.id;
-	if (drawio.selectedTool !== 'text'){
+	if (drawio.selectedTool !== 'text') {
 		hideTextBox()
 	}
 })
@@ -262,14 +328,14 @@ __('#fill-color').on('change', function () {
 
 __('#filled').on('change', function () {
 	drawio.fill = !drawio.fill;
-	if (!drawio.fill){
+	if (!drawio.fill) {
 		__('#sameColorOutline')[0].checked = false;
 		drawio.stroke = true;
 	}
 })
 
-__('#sameColorOutline').on('change', function(){
-	if (__('#filled')[0].checked){
+__('#sameColorOutline').on('change', function () {
+	if (__('#filled')[0].checked) {
 		drawio.stroke = !drawio.stroke;
 	}
 	else {
@@ -297,9 +363,13 @@ __('.drawingBoard').on('mousedown', function (mouseEvent) {
 });
 
 __('.drawingBoard').on('mouseup', function (mouseEvent) {
-	if (drawio.selectedTool === 'text' || !drawio.isDrawing) return;
-	console.log(drawio.selectedElement)
-	stopDrawing();
+	if (drawio.selectedTool === drawio.availableTools.TEXT || !drawio.isDrawing) return;
+	if (drawio.selectedTool === drawio.availableTools.MOVE) {
+		stopDraging()
+	} else {
+
+		stopDrawing();
+	}
 });
 
 __('.drawingBoard').on('mousemove', function (mouseEvent) {
@@ -309,7 +379,7 @@ __('.drawingBoard').on('mousemove', function (mouseEvent) {
 });
 
 // On Enter
-__('#textBox').on('keydown', function(e){
+__('#textBox').on('keydown', function (e) {
 	if (drawio.selectedTool === 'text') {
 		if (e.key === 'Enter') {
 			drawText(e);
@@ -319,7 +389,7 @@ __('#textBox').on('keydown', function(e){
 
 
 // TODO skoða hvort það þurfi þetta hér eða hafa þetta allt loadað þegar það er submittað texta með enter
-__('#fontSelector').on('change', function(){
+__('#fontSelector').on('change', function () {
 	let selected = __('#fontSelector')[0];
 	drawio.font = selected.options[selected.selectedIndex].value;
 })
