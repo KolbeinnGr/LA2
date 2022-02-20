@@ -112,7 +112,6 @@ function startDrawing(evt) {
 			//drawio.selectedElement = null;
 			for (let i = drawio.shapes.length - 1; i >= 0; i--) {
 				if (isInShape(drawio.shapes[i])) {
-					console.log('þetta fór inn')
 					drawio.dragStartPos.x = drawio.lastPos.x - drawio.shapes[i].element.position.x;
 					drawio.dragStartPos.y = drawio.lastPos.y - drawio.shapes[i].element.position.y;
 					drawio.selectedElement = drawio.shapes[i].element;
@@ -139,7 +138,7 @@ function isInShape(shape) {
 		var dx = mouseX - eleX;
 		var dy = mouseY - eleY;
 		if (dx * dx + dy * dy < element.radius * element.radius) {
-			return (true);
+			return true;
 		}
 	} else if (shape.selectedTool === drawio.availableTools.RECTANGLE) {
 		console.log("skoða kassa", element.width, element.height);
@@ -149,13 +148,24 @@ function isInShape(shape) {
 		var rTop = eleY;
 		var rBott = eleY + element.height;
 		if (mouseX > rLeft && mouseX < rRight && mouseY > rTop && mouseY < rBott) {
-			return (true);
+			return true;
 		}
-	} else if (shape.selectedTool === drawio.availableTools.PEN){
+	} else if (shape.selectedTool === drawio.availableTools.PEN) {
 
-	} else if (shape.selectedTool === drawio.availableTools.LINE){
+		for (let i = 0; i < element.pointList.length; i++) {
+			const p = element.pointList[i];
+			var dx = mouseX - p.x;
+			var dy = mouseY - p.y;
+			if (dx * dx + dy * dy < shape.strokeSize * shape.strokeSize) {
+				return true;
+			}
+
+		}
+
+
+	} else if (shape.selectedTool === drawio.availableTools.LINE) {
 		console.log(shape)
-	} else if (shape.selectedTool === drawio.availableTools.TEXT){
+	} else if (shape.selectedTool === drawio.availableTools.TEXT) {
 
 		var rLeft = eleX;
 		var rRight = eleX + drawio.ctx.measureText(element.textString).width;
@@ -201,13 +211,20 @@ function stopDraging() {
 	drawio.undo_stack = [];
 }
 
+
 function draw(evt) {
 	if (!drawio.isDrawing || drawio.selectedTool === drawio.availableTools.TEXT || (!drawio.isDragging && drawio.selectedTool === drawio.availableTools.MOVE)) return;
 	let pos = getMouseXY(evt);
 
 	if (drawio.isDragging && drawio.selectedTool === drawio.availableTools.MOVE) {
-		drawio.selectedElement.position.x = pos.x - drawio.dragStartPos.x;
-		drawio.selectedElement.position.y = pos.y - drawio.dragStartPos.y;
+
+		if (typeof (drawio.selectedElement.pointList) !== "undefined") {
+			movePen(pos)
+		} else {
+			drawio.selectedElement.position.x = pos.x - drawio.dragStartPos.x;
+			drawio.selectedElement.position.y = pos.y - drawio.dragStartPos.y;
+			console.log(drawio.selectedElement);
+		}
 	} else {
 		drawio.selectedElement.resize(pos.x, pos.y);
 	}
@@ -241,6 +258,16 @@ function drawText(e) {
 	clearCanvas();
 	drawCanvas();
 
+}
+
+function movePen(pos) {
+	let difX = pos.x - drawio.lastPos.x;
+	let difY = pos.y - drawio.lastPos.y;
+	drawio.lastPos = pos;
+	drawio.selectedElement.pointList.forEach(p => {
+		p.x += difX;
+		p.y += difY;
+	});
 }
 
 function loadFile() {
