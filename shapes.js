@@ -27,18 +27,16 @@ Rectangle.prototype = Object.create(Shape.prototype);
 Rectangle.prototype.constructor = Rectangle;
 
 Rectangle.prototype.render = function (shape) {
-    // rectangle rendering
-    //if (checked === undefined) {
-    //    checked = $('#filled').is(':checked');
-    //}
 
-    if (shape.fill) {
-        // console.log(checked)
-        drawio.ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+    if (shape.stroke){
         drawio.ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);
     }
+    if (shape.fill) {
 
-    drawio.ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);
+        drawio.ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+
+    }
+
 }
 
 Rectangle.prototype.resize = function (x, y) {
@@ -62,7 +60,9 @@ Circle.prototype.render = function (shape) {
 
     drawio.ctx.beginPath();
     drawio.ctx.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI)
-    drawio.ctx.stroke();
+    if (shape.stroke){
+        drawio.ctx.stroke();
+    }
 
     if (shape.fill) {
         drawio.ctx.fill();
@@ -109,8 +109,7 @@ Line.prototype.resize = function (x, y) {
 function Text(position) {
     Shape.call(this, position);
     this.textString = "";
-    this.font = drawio.font
-    this.size = drawio.fontSize
+
 
 }
 
@@ -118,12 +117,12 @@ Text.prototype = Object.create(Shape.prototype);
 Text.prototype.constructor = Text;
 
 
-Text.prototype.render = function (checked) {
+Text.prototype.render = function (shape) {
 
-    // drawio.ctx.font = "30px " + this.font;
-    drawio.ctx.font = this.size + " " + this.font;
+    drawio.ctx.font = shape.fontSize + "px " + shape.font;
+    drawio.ctx.lineWidth = Math.floor(shape.strokeSize/5);
 
-    if (checked) {
+    if (shape.fill) {
         drawio.ctx.fillText(this.textString, this.position.x, this.position.y);
     }
     else {

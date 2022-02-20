@@ -15,10 +15,12 @@ let drawio = {
 	isDrawing: false, currPos: {},
 	strokeSize: 10,
 	strokeColor: "#000000",
+	stroke: true,
 	fillColor: "#ff0000",
 	fill: true,
 	font: 'Arial',
 	fontSize: 25 + 'px'
+
 };
 
 
@@ -47,7 +49,8 @@ function drawCanvas() {
 				strokeColor: drawio.strokeColor,
 				strokeSize: drawio.strokeSize,
 				fillColor: drawio.fillColor,
-				fill: drawio.fill
+				fill: drawio.fill,
+				stroke: drawio.stroke
 			});
 	}
 }
@@ -55,6 +58,15 @@ function drawCanvas() {
 
 function getMouseXY(evt) {
 	return { x: evt.offsetX, y: evt.offsetY }
+}
+
+function hideTextBox(){
+	__('#textBox')[0].value = ""
+	__('#textDiv').css('visibility','hidden')
+}
+
+function showTextBox(evt){
+	__('#textDiv').css('visibility', 'visible').css('top', evt.clientY +'px').css('left', evt.clientX +'px');
 }
 
 
@@ -85,14 +97,16 @@ function startDrawing(evt) {
 			break;
 		case drawio.availableTools.TEXT:
 			drawio.selectedElement = new Text(drawio.lastPos);
-			// ekki rétti staðurinn fyrir þetta. þarf að færa þetta því eftir load poppar glugginn upp!
-			__('#textDiv').css('visibility', 'visible').css('top', evt.clientY +'px').css('left', evt.clientX +'px');
+			// TODO skoða hvort þetta eigi ekki heima á betri stað. lítur asnalega út að hafa þetta hér.
+			if(evt.offsetX && evt.offsetY){
+				showTextBox(evt)
+			}
 			break;
 		case drawio.availableTools.PEN:
 			drawio.selectedElement = new Pen(drawio.lastPos);
 			break;
 	}
-};
+}
 
 function stopDrawing() {
 	if (!drawio.isDrawing) return;
@@ -107,7 +121,8 @@ function stopDrawing() {
 		fillColor: drawio.fillColor,
 		fill: drawio.fill,
 		element: drawio.selectedElement, checked: drawio.fill,
-		selectedTool: drawio.selectedTool
+		selectedTool: drawio.selectedTool,
+		stroke: drawio.stroke
 	});
 	drawio.selectedElement = null;
 	clearCanvas();
@@ -125,24 +140,33 @@ function draw(evt) {
 	drawCanvas();
 }
 
+function drawText(e){
+	drawio.fontSize = __('#fontSize')[0].value
 
-/*Events*/
+	drawio.selectedElement.textString = document.getElementById('textBox').value
+	drawio.shapes.push({
+		strokeColor: drawio.strokeColor,
+		strokeSize: drawio.strokeSize,
+		fillColor: drawio.fillColor,
+		fill: drawio.fill,
+		element: drawio.selectedElement, checked: drawio.fill,
+		selectedTool: drawio.selectedTool,
+		font: drawio.font,
+		fontSize: drawio.fontSize
+	});
+	drawio.selectedElement = null;
+	drawio.undo_stack = [];
+	drawio.isDrawing = false;
 
-// SAVE TO FILE
-__('#save').on('click', function () {
-	console.log("save stuff")
-	let json = JSON.stringify(drawio.shapes);
-	let blob = new Blob([json], {type: "application/json"});
-	let url = URL.createObjectURL(blob);
-	let a = document.createElement('a');
-	a.download = 'save_file.json';
-	a.href = url;
-	a.textcontent = "Save json";
-	a.click();
-});
 
-// LOAD FROM FILE
-__('#submitButton').on('click', function(){
+	hideTextBox();
+	clearCanvas();
+	drawCanvas();
+
+
+}
+
+function loadFile(){
 	let fileToLoad = document.getElementById('myFile').files[0]
 
 	const fileReader = new FileReader();
@@ -168,9 +192,7 @@ __('#submitButton').on('click', function(){
 				selectedTool: ele.selectedTool
 			});
 			drawio.selectedElement = null;
-
 		});
-
 		clearCanvas();
 		drawCanvas();
 		drawio.undo_stack = [];
@@ -178,8 +200,32 @@ __('#submitButton').on('click', function(){
 	}
 
 	fileReader.readAsText(fileToLoad, "UTF-8");
-})
+	}
 
+function saveFile(){
+	console.log("save stuff")
+	let json = JSON.stringify(drawio.shapes);
+	let blob = new Blob([json], {type: "application/json"});
+	let url = URL.createObjectURL(blob);
+	let a = document.createElement('a');
+	a.download = 'save_file.json';
+	a.href = url;
+	a.textcontent = "Save json";
+	a.click();
+}
+
+
+/*Events*/
+
+// SAVE TO FILE
+__('#save').on('click', function () {
+	saveFile();
+});
+
+// LOAD FROM FILE
+__('#submitButton').on('click', function() {
+	loadFile();
+})
 
 __('#getImg').on('click', function () {
 	downLoadImg()
@@ -193,6 +239,9 @@ __('#clear').onClick(function () {
 __('.type input').on("change", function () {
 	console.log("tool selected")
 	drawio.selectedTool = this.id;
+	if (drawio.selectedTool !== 'text'){
+		hideTextBox()
+	}
 })
 
 __('#stroke-color').on("change", function () {
@@ -205,13 +254,26 @@ __('#stroke-size').on('change', function () {
 	drawio.ctx.lineWidth = this.value;
 })
 
-
 __('#fill-color').on('change', function () {
 	drawio.fillColor = this.value;
 	drawio.ctx.fillStyle = this.value;
 })
+
 __('#filled').on('change', function () {
 	drawio.fill = !drawio.fill;
+	if (!drawio.fill){
+		__('#sameColorOutline')[0].checked = false;
+		drawio.stroke = !drawio.stroke;
+	}
+})
+
+__('#sameColorOutline').on('change', function(){
+	if (__('#filled')[0].checked){
+		drawio.stroke = !drawio.stroke;
+	}
+	else {
+		__('#sameColorOutline')[0].checked = false;
+	}
 })
 
 
@@ -247,31 +309,16 @@ __('.drawingBoard').on('mousemove', function (mouseEvent) {
 
 // On Enter
 __('#textBox').on('keydown', function(e){
-
 	if (drawio.selectedTool === 'text') {
 		if (e.key === 'Enter') {
-			drawio.selectedElement.textString = document.getElementById('textBox').value
-			drawio.shapes.push({
-				strokeColor: drawio.strokeColor,
-				strokeSize: drawio.strokeSize,
-				fillColor: drawio.fillColor,
-				fill: drawio.fill,
-				element: drawio.selectedElement, checked: drawio.fill,
-				selectedTool: drawio.selectedTool
-			});
-			drawio.selectedElement = null;
-			drawio.undo_stack = [];
-
-			__('#textBox')[0].value = ""
-			__('#textDiv').css('visibility','hidden')
-			drawio.isDrawing = false;
+			drawText(e);
 		}
-		clearCanvas()
-		drawCanvas();
-	}})
+	}
+})
 
+
+// TODO skoða hvort það þurfi þetta hér eða hafa þetta allt loadað þegar það er submittað texta með enter
 __('#fontSelector').on('change', function(){
 	let selected = __('#fontSelector')[0];
-	console.log( selected.options[selected.selectedIndex].value)
 	drawio.font = selected.options[selected.selectedIndex].value;
 })
