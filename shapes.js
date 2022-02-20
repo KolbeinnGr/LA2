@@ -125,7 +125,7 @@ Text.prototype.render = function (shape) {
     if (shape.fill) {
         drawio.ctx.fillText(this.textString, this.position.x, this.position.y);
     }
-    else {
+    if (shape.stroke) {
         drawio.ctx.strokeText(this.textString, this.position.x, this.position.y)
     }
 }

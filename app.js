@@ -149,6 +149,7 @@ function drawText(e){
 		strokeSize: drawio.strokeSize,
 		fillColor: drawio.fillColor,
 		fill: drawio.fill,
+		stroke: drawio.stroke,
 		element: drawio.selectedElement, checked: drawio.fill,
 		selectedTool: drawio.selectedTool,
 		font: drawio.font,
