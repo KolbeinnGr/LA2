@@ -264,7 +264,7 @@ __('#filled').on('change', function () {
 	drawio.fill = !drawio.fill;
 	if (!drawio.fill){
 		__('#sameColorOutline')[0].checked = false;
-		drawio.stroke = !drawio.stroke;
+		drawio.stroke = true;
 	}
 })
 
