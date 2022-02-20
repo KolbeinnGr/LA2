@@ -109,6 +109,8 @@ Line.prototype.resize = function (x, y) {
 function Text(position) {
     Shape.call(this, position);
     this.textString = "";
+    this.font = drawio.font
+    this.size = drawio.fontSize
 
 }
 
@@ -118,7 +120,8 @@ Text.prototype.constructor = Text;
 
 Text.prototype.render = function (checked) {
 
-    drawio.ctx.font = "30px Arial";
+    // drawio.ctx.font = "30px " + this.font;
+    drawio.ctx.font = this.size + " " + this.font;
 
     if (checked) {
         drawio.ctx.fillText(this.textString, this.position.x, this.position.y);

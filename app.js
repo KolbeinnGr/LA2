@@ -16,7 +16,9 @@ let drawio = {
 	strokeSize: 10,
 	strokeColor: "#000000",
 	fillColor: "#ff0000",
-	fill: true
+	fill: true,
+	font: 'Arial',
+	fontSize: 25 + 'px'
 };
 
 
@@ -83,7 +85,8 @@ function startDrawing(evt) {
 			break;
 		case drawio.availableTools.TEXT:
 			drawio.selectedElement = new Text(drawio.lastPos);
-			__('#textBox').css('visibility', 'visible').css('top', evt.clientY +'px').css('left', evt.clientX +'px');
+			// ekki rétti staðurinn fyrir þetta. þarf að færa þetta því eftir load poppar glugginn upp!
+			__('#textDiv').css('visibility', 'visible').css('top', evt.clientY +'px').css('left', evt.clientX +'px');
 			break;
 		case drawio.availableTools.PEN:
 			drawio.selectedElement = new Pen(drawio.lastPos);
@@ -259,8 +262,16 @@ __('#textBox').on('keydown', function(e){
 			drawio.selectedElement = null;
 			drawio.undo_stack = [];
 
-			__('#textBox').css('visibility','hidden')[0].value = ""
+			__('#textBox')[0].value = ""
+			__('#textDiv').css('visibility','hidden')
+			drawio.isDrawing = false;
 		}
 		clearCanvas()
 		drawCanvas();
 	}})
+
+__('#fontSelector').on('change', function(){
+	let selected = __('#fontSelector')[0];
+	console.log( selected.options[selected.selectedIndex].value)
+	drawio.font = selected.options[selected.selectedIndex].value;
+})
