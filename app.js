@@ -159,12 +159,15 @@ function isInShape(shape) {
 			if (dx * dx + dy * dy < shape.strokeSize * shape.strokeSize) {
 				return true;
 			}
-
 		}
 
-
 	} else if (shape.selectedTool === drawio.availableTools.LINE) {
-		console.log(shape)
+		let A = element.position;
+		let B = {x: element.endX, y: element.endY};
+		let C = drawio.lastPos;
+		console.log(Math.abs((C.y - A.y)*(B.x - A.x) - (B.y - A.y)*(C.x - A.x))<drawio.strokeSize*100);
+		return (Math.abs((C.y - A.y)*(B.x - A.x) - (B.y - A.y)*(C.x - A.x))<drawio.strokeSize*100);
+
 	} else if (shape.selectedTool === drawio.availableTools.TEXT) {
 
 		var rLeft = eleX;

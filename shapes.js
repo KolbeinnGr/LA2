@@ -120,7 +120,7 @@ Text.prototype.constructor = Text;
 Text.prototype.render = function (shape) {
 
     drawio.ctx.font = shape.fontSize + "px " + shape.font;
-    drawio.ctx.lineWidth = Math.floor(shape.strokeSize/5);
+    drawio.ctx.lineWidth = Math.floor(shape.strokeSize/7);
 
     if (shape.fill) {
         drawio.ctx.fillText(this.textString, this.position.x, this.position.y);
