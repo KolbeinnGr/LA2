@@ -3,7 +3,6 @@
 function Shape(position) {
     this.position = position;
     drawio.ctx.strokeStyle = drawio.strokeColor;
-    // console.log(drawio.ctx.strokeStyle, drawio.strokeColor)
 }
 
 Shape.prototype.render = function () { }
@@ -120,28 +119,22 @@ Text.prototype.constructor = Text;
 Text.prototype.render = function (shape) {
 
     drawio.ctx.font = shape.fontSize + "px " + shape.font;
-    drawio.ctx.lineWidth = Math.floor(shape.strokeSize/7);
+    let strokeSize = Math.floor(shape.strokeSize/5);
+    if (Math.floor(strokeSize) < 1) strokeSize = 1;
+    drawio.ctx.lineWidth = strokeSize;
 
     if (shape.fill) {
         drawio.ctx.fillText(this.textString, this.position.x, this.position.y);
-        // console.log(drawio.ctx.measureText(this.textString));
+
     }
     if (shape.stroke) {
         drawio.ctx.strokeText(this.textString, this.position.x, this.position.y)
-        // drawio.ctx.measureText(this.textString);
+
     }
 }
 
 Text.prototype.resize = function (button) {
-    // console.log(button)
-    // if (button === 'Backspace') {
-    //     let tempString = this.textString;
-    //     this.textString = tempString.slice(0, -1);
-    //
-    // }
-    // else {
-    //     this.textString += button;
-    // }
+
 }
 
 //------ PEN ------//
