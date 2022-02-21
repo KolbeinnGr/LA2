@@ -104,24 +104,20 @@ function startDrawing(evt) {
 			drawio.selectedElement = new Pen(drawio.lastPos);
 			break;
 		case drawio.availableTools.MOVE:
-
 			for (let i = drawio.shapes.length - 1; i >= 0; i--) {
 				if (isInShape(drawio.shapes[i])) {
 					drawio.dragStartPos.x = drawio.lastPos.x - drawio.shapes[i].element.position.x;
 					drawio.dragStartPos.y = drawio.lastPos.y - drawio.shapes[i].element.position.y;
 					drawio.selectedElement = drawio.shapes[i].element;
 					drawio.isDragging = true;
-
 					break;
 				}
 			}
 			break;
-	}
-}
+	}}
 
 
 function isInShape(shape) {
-
 	let element = shape.element
 	let mouseX = drawio.lastPos.x;
 	let mouseY = drawio.lastPos.y;
@@ -215,22 +211,17 @@ function draw(evt) {
 			movePen(pos)
 		} else {
 
-
-
 			if (drawio.selectedElement.endY && drawio.selectedElement.endX){
-
 				drawio.selectedElement.endY -= drawio.selectedElement.position.y - (pos.y - drawio.dragStartPos.y);
 				drawio.selectedElement.endX -= drawio.selectedElement.position.x - (pos.x - drawio.dragStartPos.x);
 			}
 
 			drawio.selectedElement.position.x = pos.x - drawio.dragStartPos.x;
 			drawio.selectedElement.position.y = pos.y - drawio.dragStartPos.y;
-
 		}
 	} else {
 		drawio.selectedElement.resize(pos.x, pos.y);
 	}
-
 	if (drawio.selectedTool === 'pen') return;
 	clearCanvas();
 	drawCanvas();
@@ -238,7 +229,6 @@ function draw(evt) {
 
 function drawText(e) {
 	drawio.fontSize = __('#fontSize')[0].value
-
 	drawio.selectedElement.textString = document.getElementById('textBox').value
 	drawio.shapes.push({
 		strokeColor: drawio.strokeColor,
@@ -287,7 +277,6 @@ function loadFile() {
 
 			for (let prop in ele.element) {
 				drawio.selectedElement[prop] = ele.element[prop];
-
 			}
 			drawio.shapes.push({
 				strokeColor: ele.strokeColor,
@@ -300,7 +289,6 @@ function loadFile() {
 				font: 'Arial',
 				fontSize: ele.fontSize
 			});
-
 			drawio.selectedElement = null;
 			drawio.isDrawing = false;
 		});
@@ -360,7 +348,6 @@ __('#clear').onClick(function () {
 
 //SELECT TOOL
 __('.type input').on("change", function () {
-
 	drawio.selectedTool = this.id;
 	if (drawio.selectedTool !== 'text') {
 		hideTextBox()

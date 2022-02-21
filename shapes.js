@@ -31,9 +31,7 @@ Rectangle.prototype.render = function (shape) {
         drawio.ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);
     }
     if (shape.fill) {
-
         drawio.ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
-
     }
 
 }
@@ -86,18 +84,14 @@ Line.prototype.constructor = Line;
 
 
 Line.prototype.render = function () {
-
     drawio.ctx.beginPath();
     drawio.ctx.moveTo(this.position.x, this.position.y);
     drawio.ctx.lineTo(this.endX, this.endY);
     drawio.ctx.stroke();
-
-
 }
 
 Line.prototype.resize = function (x, y) {
     drawio.ctx.lineTo(x, y)
-
     this.endX = x;
     this.endY = y;
 }
@@ -108,8 +102,6 @@ Line.prototype.resize = function (x, y) {
 function Text(position) {
     Shape.call(this, position);
     this.textString = "";
-
-
 }
 
 Text.prototype = Object.create(Shape.prototype);
@@ -117,53 +109,34 @@ Text.prototype.constructor = Text;
 
 
 Text.prototype.render = function (shape) {
-
     drawio.ctx.font = shape.fontSize + "px " + shape.font;
-
     let strokeSize = Math.floor(shape.strokeSize/5);
+
     if (Math.floor(strokeSize) < 1) strokeSize = 1;
     drawio.ctx.lineWidth = strokeSize;
 
     if (shape.fill) {
         drawio.ctx.fillText(this.textString, this.position.x, this.position.y);
-
     }
     if (shape.stroke) {
         drawio.ctx.strokeText(this.textString, this.position.x, this.position.y)
-
     }
-
 }
 
 Text.prototype.resize = function (button) {
-
 }
 
 //------ PEN ------//
-
 function Pen(position) {
     Shape.call(this, position);
     this.endX = this.x = position.x;
     this.endY = this.y = position.y;
 
     this.pointList = [];
-
 }
 
 Pen.prototype = Object.create(Shape.prototype);
 Pen.prototype.constructor = Pen;
-
-
-// Pen.prototype.render = function () {
-//     drawio.ctx.beginPath();
-//     let coord = this.pointList[0];
-//     drawio.ctx.moveTo(coord.x, coord.y);
-//     this.pointList.forEach(coord => {
-//         drawio.ctx.lineTo(coord.x, coord.y);
-//     });
-//     drawio.ctx.stroke();
-//     drawio.ctx.closePath();
-// }
 
 Pen.prototype.render = function () {
     drawio.ctx.beginPath();
@@ -173,7 +146,6 @@ Pen.prototype.render = function () {
         drawio.ctx.lineCap = "round";
         drawio.ctx.lineTo(coord.x, coord.y);
         coord2 = coord;
-
     });
     drawio.ctx.stroke();
     drawio.ctx.closePath();
@@ -189,11 +161,9 @@ Pen.prototype.resize = function (x, y) {
         drawio.ctx.lineTo(x, y);
         drawio.ctx.stroke();
     }
-
     drawio.ctx.closePath();
     this.endX = x;
     this.endY = y;
-
     this.pointList.push({ x: x, y: y })
 
 }
