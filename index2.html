@@ -18,33 +18,35 @@
             <div class="title">Tólastika</div>
             <div class="type">
                 <input type="radio" name="sel-tool" id="move">
-                <label for="move"><i class="fa-solid fa-arrows-up-down-left-right"></i></label>
+                <label for="move"><i title="Færa hluti til" class="fa-solid fa-arrows-up-down-left-right"></i></label>
 
                 <input type="radio" name="sel-tool" id="pen" checked>
-                <label for="pen"><i class="fa fa-pencil"></i></label>
+                <label for="pen"><i title="Teikna frýhendis" class="fa fa-pencil"></i></label>
 
                 <input type="radio" name="sel-tool" id="square">
-                <label for="square"><i class="fa fa-square-o"></i></label>
+                <label for="square"><i title="Teikna kassa" class="fa fa-square-o"></i></label>
 
                 <input type="radio" name="sel-tool" id="circle">
-                <label for="circle"><i class="fa fa-circle-o"></i></label>
+                <label for="circle"><i title="Teikna hring" class="fa fa-circle-o"></i></label>
 
                 <input type="radio" name="sel-tool" id="line">
-                <label for="line"><i class="fa fa-minus"></i></label>
+                <label for="line"><i title="Teikna línu" class="fa fa-minus"></i></label>
 
                 <input type="radio" name="sel-tool" id="text">
-                <label for="text"><i class="fa fa-font"></i></label>
+                <label for="text"><i title="Skrifa texta" class="fa fa-font"></i></label>
 
             </div>
             <div class="title">Stilla útlínu</div>
             <div class="color">
                 <label for="stroke-color"></label>
                 <input type="color" id="stroke-color" value="#000000">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <input id="outline" type="checkbox" title="Hafa útlínu" checked>
+                <label for="stroke-size"> </label>
+                <input title="Línubreidd" type="range" id="stroke-size" min="1" max="20">
+                <span id="lineWidthText" class="label">10</span>
             </div>
-            <div class="size">
-                <label for="stroke-size"></label>
-                <input type="range" id="stroke-size" min="1" max="20">
-            </div>
+
 
             <div class="title">Stilla fyllingu</div>
             <div class="color">
@@ -62,20 +64,25 @@
             <div class="title">Aðgerðir</div>
             <div class="actions">
                 <div class="action-row">
-                    <i class="fa-solid fa-rotate-left"></i>
-                    <button id="undo">Afturkalla</button>
-                    <i class="fa-solid fa-rotate-right"></i>
-                    <button id="redo">Endurgera</button>
+
+                    <!--<button id="redo">Endurgera</button>-->
+                    <!--<button id="clear">Hreinsa</button>-->
+                    <i id="clear" title="Hreinsa" class="btn fa-solid fa-ban"></i>
+                    <i id="getImg" title="Hala niður mynd" class="btn fa-solid fa-image"></i>
+                    <i id="save" title="Vista teikningu" class="btn fa-solid fa-floppy-disk"></i>
+                    <i id="upload" title="Hlaða inn teikningu" class="btn fa-solid fa-upload"></i>
+                    <!--<button id="save">Vista</button>-->
+                    <!--<button id="getImg">Sækja mynd</button>-->
+                    <i id="undo" title="Afturkalla" class="btn fa-solid fa-rotate-left"></i>
+                    <!--<button id="undo">Afturkalla</button>-->
+                    <i id="redo" title="Endurgera" class="btn fa-solid fa-rotate-right"></i>
                 </div>
-                <div class="action-row">
-                    <button id="clear">Hreinsa</button>
-                    <i class="fa-solid fa-floppy-disk"></i>
-                    <button id="save">Vista</button>
+
+                <div class="loadForm">
                     <form action="javascript:void(0);">
                         <input type="file" id="myFile" name="filename">
-                        <input type="submit" id="submitButton">
+                        <!--<input type="submit" id="submitButton">-->
                     </form>
-                    <button id="getImg">Sækja mynd</button>
                 </div>
 
             </div>

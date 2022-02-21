@@ -33,13 +33,19 @@ body{
 	font-weight: 700;
 	color: #1f1919;
 	text-align: center;
-	padding-top: 10px;
+	padding-top: 30px;
 }
 
-.toolbar .type, .toolbar .size, .toolbar .color, .toolbar .actions
+.toolbar .type, .toolbar .color, .toolbar .actions
 {
 	margin: 10px;
 }
+
+
+.label{
+	font-weight: 600;
+}
+
 
 .toolbar .type input {
 	display: none;
@@ -55,11 +61,26 @@ body{
 	cursor: pointer;
 }
 
+#myFile{
+	display: none;
+}
+
 .toolbar .type input:checked + label {
 	background-color: #dddddd;
 	border-radius: 50%;
 }
 
+.btn{
+	cursor: pointer;
+	background-color: #cccccc;
+	margin-right: 10px;
+	margin-bottom: 10px;
+} 
+
+.btn:hover{
+
+	background-color: #dddddd;
+} 
 /* canvasinn */
 
 .drawingBoard {

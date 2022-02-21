@@ -141,7 +141,6 @@ function isInShape(shape) {
 			return true;
 		}
 	} else if (shape.selectedTool === drawio.availableTools.RECTANGLE) {
-		console.log("skoða kassa", element.width, element.height);
 
 		var rLeft = eleX;
 		var rRight = eleX + element.width;
@@ -160,13 +159,12 @@ function isInShape(shape) {
 				return true;
 			}
 		}
-
 	} else if (shape.selectedTool === drawio.availableTools.LINE) {
 		let A = element.position;
-		let B = {x: element.endX, y: element.endY};
+		let B = { x: element.endX, y: element.endY };
 		let C = drawio.lastPos;
-		console.log(Math.abs((C.y - A.y)*(B.x - A.x) - (B.y - A.y)*(C.x - A.x))<drawio.strokeSize*100);
-		return (Math.abs((C.y - A.y)*(B.x - A.x) - (B.y - A.y)*(C.x - A.x))<drawio.strokeSize*100);
+
+		return (Math.abs((C.y - A.y) * (B.x - A.x) - (B.y - A.y) * (C.x - A.x)) < drawio.strokeSize * 100);
 
 	} else if (shape.selectedTool === drawio.availableTools.TEXT) {
 
@@ -321,6 +319,9 @@ function saveFile() {
 }
 
 
+
+
+
 /*Events*/
 
 // SAVE TO FILE
@@ -330,6 +331,19 @@ __('#save').on('click', function () {
 
 // LOAD FROM FILE
 __('#submitButton').on('click', function () {
+	loadFile();
+})
+
+__("#upload").on('click', function () {
+	//smá mix til að nota custom button, eflaust hægt gera þetta á annan mána.
+	var btn = document.getElementById('myFile');
+	if (btn && document.createEvent) {
+		var evt = document.createEvent("MouseEvents");
+		evt.initEvent("click", true, false);
+		btn.dispatchEvent(evt);
+	}
+})
+__("#myFile").on('change', function () {
 	loadFile();
 })
 
@@ -359,8 +373,10 @@ __('#stroke-color').on("change", function () {
 })
 
 __('#stroke-size').on('change', function () {
+
 	drawio.strokeSize = this.value;
 	drawio.ctx.lineWidth = this.value;
+	__("#lineWidthText").insertText(this.value);
 })
 
 __('#fill-color').on('change', function () {
