@@ -392,14 +392,19 @@ __('#filled').on('change', function () {
 	}
 })
 
-__('#sameColorOutline').on('change', function () {
-	if (__('#filled')[0].checked) {
-		drawio.stroke = !drawio.stroke;
-	}
-	else {
-		__('#sameColorOutline')[0].checked = false;
-	}
+__('#outline').on('change', function () {
+	drawio.stroke = !drawio.stroke;
 })
+
+__
+//__('#sameColorOutline').on('change', function () {
+//	if (__('#filled')[0].checked) {
+//		drawio.stroke = !drawio.stroke;
+//	}
+//	else {
+//		__('#sameColorOutline')[0].checked = false;
+//	}
+//})
 
 
 __('#undo').on('click', function () {
