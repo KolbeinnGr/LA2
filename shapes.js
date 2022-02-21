@@ -119,6 +119,7 @@ Text.prototype.constructor = Text;
 Text.prototype.render = function (shape) {
 
     drawio.ctx.font = shape.fontSize + "px " + shape.font;
+
     let strokeSize = Math.floor(shape.strokeSize/5);
     if (Math.floor(strokeSize) < 1) strokeSize = 1;
     drawio.ctx.lineWidth = strokeSize;
@@ -131,6 +132,7 @@ Text.prototype.render = function (shape) {
         drawio.ctx.strokeText(this.textString, this.position.x, this.position.y)
 
     }
+
 }
 
 Text.prototype.resize = function (button) {

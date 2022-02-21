@@ -23,7 +23,7 @@ let drawio = {
 	fillColor: "#ff0000",
 	fill: true,
 	font: 'Arial',
-	fontSize: 25 + 'px'
+	fontSize: 25
 
 };
 
@@ -127,9 +127,9 @@ function isInShape(shape) {
 	let mouseY = drawio.lastPos.y;
 	let eleX = element.position.x;
 	let eleY = element.position.y;
-	console.log("---->" + element);
+
 	if (shape.selectedTool === drawio.availableTools.CIRCLE) {
-		console.log(element.radius)
+
 		let dx = mouseX - eleX;
 		let dy = mouseY - eleY;
 		if (dx * dx + dy * dy < element.radius * element.radius) {
@@ -175,12 +175,10 @@ function isInShape(shape) {
 	return false;
 }
 
-
 function stopDrawing() {
 	if (!drawio.isDrawing || drawio.selectedTool === drawio.availableTools.TEXT) {
 		return
 	}
-
 	drawio.isDrawing = false;
 	drawio.shapes.push({
 		strokeColor: drawio.strokeColor,
@@ -207,7 +205,6 @@ function stopDraging() {
 	drawio.undo_stack = [];
 }
 
-
 function draw(evt) {
 	if (!drawio.isDrawing || drawio.selectedTool === drawio.availableTools.TEXT || (!drawio.isDragging && drawio.selectedTool === drawio.availableTools.MOVE)) return;
 	let pos = getMouseXY(evt);
@@ -217,9 +214,18 @@ function draw(evt) {
 		if (typeof (drawio.selectedElement.pointList) !== "undefined") {
 			movePen(pos)
 		} else {
+
+
+
+			if (drawio.selectedElement.endY && drawio.selectedElement.endX){
+
+				drawio.selectedElement.endY -= drawio.selectedElement.position.y - (pos.y - drawio.dragStartPos.y);
+				drawio.selectedElement.endX -= drawio.selectedElement.position.x - (pos.x - drawio.dragStartPos.x);
+			}
+
 			drawio.selectedElement.position.x = pos.x - drawio.dragStartPos.x;
 			drawio.selectedElement.position.y = pos.y - drawio.dragStartPos.y;
-			console.log(drawio.selectedElement);
+
 		}
 	} else {
 		drawio.selectedElement.resize(pos.x, pos.y);
@@ -290,8 +296,11 @@ function loadFile() {
 				fill: ele.fill,
 				stroke: ele.stroke,
 				element: drawio.selectedElement, checked: drawio.fill,
-				selectedTool: ele.selectedTool
+				selectedTool: ele.selectedTool,
+				font: 'Arial',
+				fontSize: ele.fontSize
 			});
+
 			drawio.selectedElement = null;
 			drawio.isDrawing = false;
 		});
@@ -305,7 +314,7 @@ function loadFile() {
 }
 
 function saveFile() {
-	console.log("save stuff")
+
 	let json = JSON.stringify(drawio.shapes);
 	let blob = new Blob([json], { type: "application/json" });
 	let url = URL.createObjectURL(blob);
@@ -351,7 +360,7 @@ __('#clear').onClick(function () {
 
 //SELECT TOOL
 __('.type input').on("change", function () {
-	console.log("tool selected")
+
 	drawio.selectedTool = this.id;
 	if (drawio.selectedTool !== 'text') {
 		hideTextBox()
@@ -413,7 +422,7 @@ __('.drawingBoard').on('mouseup', function (mouseEvent) {
 
 __('.drawingBoard').on('mousemove', function (mouseEvent) {
 	if (drawio.selectedTool === 'text' || !drawio.isDrawing) return;
-	console.log(drawio.selectedElement)
+
 	draw(mouseEvent);
 });
 
