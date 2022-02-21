@@ -15,7 +15,31 @@
 <body>
     <div class="app">
         <div class="toolbar">
-            <div class="title">Tólastika</div>
+            <div class="title">Aðgerðir</div>
+            <div class="actions">
+                <div class="action-row">
+
+                    <!--<button id="redo">Endurgera</button>-->
+                    <!--<button id="clear">Hreinsa</button>-->
+                    <i id="clear" title="Hreinsa" class="btn fa-solid fa-ban"></i>
+                    <i id="getImg" title="Hala niður mynd" class="btn fa-solid fa-image"></i>
+                    <i id="save" title="Vista teikningu" class="btn fa-solid fa-floppy-disk"></i>
+                    <i id="upload" title="Hlaða inn teikningu" class="btn fa-solid fa-upload"></i>
+                    <!--<button id="save">Vista</button>-->
+                    <!--<button id="getImg">Sækja mynd</button>-->
+                    <i id="undo" title="Afturkalla" class="btn fa-solid fa-rotate-left"></i>
+                    <!--<button id="undo">Afturkalla</button>-->
+                    <i id="redo" title="Endurgera" class="btn fa-solid fa-rotate-right"></i>
+                </div>
+
+                <div class="loadForm">
+                    <form action="javascript:void(0);">
+                        <input type="file" id="myFile" name="filename">
+                        <!--<input type="submit" id="submitButton">-->
+                    </form>
+                </div>
+            </div>
+            <div class="title">Teiknitól</div>
             <div class="type">
                 <input type="radio" name="sel-tool" id="move">
                 <label for="move"><i title="Færa hluti til" class="fa-solid fa-arrows-up-down-left-right"></i></label>
@@ -63,30 +87,6 @@
                     name="stroke-same-as-fill" title="Settu hak hér ef þú vilt hafa sama lit fyrir útlínu og fyllingu.">-->
             </div>
 
-            <div class="title">Aðgerðir</div>
-            <div class="actions">
-                <div class="action-row">
-
-                    <!--<button id="redo">Endurgera</button>-->
-                    <!--<button id="clear">Hreinsa</button>-->
-                    <i id="clear" title="Hreinsa" class="btn fa-solid fa-ban"></i>
-                    <i id="getImg" title="Hala niður mynd" class="btn fa-solid fa-image"></i>
-                    <i id="save" title="Vista teikningu" class="btn fa-solid fa-floppy-disk"></i>
-                    <i id="upload" title="Hlaða inn teikningu" class="btn fa-solid fa-upload"></i>
-                    <!--<button id="save">Vista</button>-->
-                    <!--<button id="getImg">Sækja mynd</button>-->
-                    <i id="undo" title="Afturkalla" class="btn fa-solid fa-rotate-left"></i>
-                    <!--<button id="undo">Afturkalla</button>-->
-                    <i id="redo" title="Endurgera" class="btn fa-solid fa-rotate-right"></i>
-                </div>
-
-                <div class="loadForm">
-                    <form action="javascript:void(0);">
-                        <input type="file" id="myFile" name="filename">
-                        <!--<input type="submit" id="submitButton">-->
-                    </form>
-                </div>
-            </div>
         </div>
         <div id="textDiv">
 
