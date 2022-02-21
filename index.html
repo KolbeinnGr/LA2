@@ -1,84 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Draw io clone</title>
-    <style media="screen">
-        body {
-            padding: 0;
-            margin: 0;
-        }
-        .container {
-            padding: 20px;
-        }
-        #my-canvas {
-            background-color: rgba(155, 155, 155, 0.2);
-            box-shadow: 1px 1px 1px;
-            margin: 0 auto;
-            display: block;
-        }
-        .icon {
-            position: relative;
-            display: inline-block;
-            font-size: 4em;
-            float: right;
-            width: 100px;
-            top: 15px;
-            transition: color .5s;
-        }
-        .icon:hover {
-            color: orange;
-            cursor: pointer;
-        }
-        .icon.selected {
-            color: yellow;
-        }
-        .navEle {
-            position: relative;
-            display: inline-block;
-            float: right;
-            width: 100px;
-            top: 15px;
-        }
-        .navbar {
-            height: 100px;
-            background-color: rgba(50,100,200,0.5);
-            border-bottom: solid 6px rgba(50,100,200,1);
-        }
-    </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
-<!--    <script src="https://kit.fontawesome.com/fd4311f340.js" crossorigin="anonymous"></script>-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asignment II, Group 4</title>
+    <script src="https://kit.fontawesome.com/fd4311f340.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <nav class="navbar">
-        <div class="icon selected" data-shape="text">
-            <i class="fa fa-star-o" aria-hidden="true"></i>
+    <div class="app">
+        <div class="toolbar">
+            <div class="title">Aðgerðir</div>
+            <div class="actions">
+                <div class="action-row">
+                    <i id="clear" title="Hreinsa" class="btn fa-solid fa-ban"></i>
+                    <i id="getImg" title="Hala niður mynd" class="btn fa-solid fa-image"></i>
+                    <i id="save" title="Vista teikningu" class="btn fa-solid fa-floppy-disk"></i>
+                    <i id="upload" title="Hlaða inn teikningu" class="btn fa-solid fa-upload"></i>
+                    <i id="undo" title="Afturkalla" class="btn fa-solid fa-rotate-left"></i>
+                    <i id="redo" title="Endurgera" class="btn fa-solid fa-rotate-right"></i>
+                </div>
+
+                <div class="loadForm">
+                    <form action="javascript:void(0);">
+                        <input type="file" id="myFile" name="filename">
+                    </form>
+                </div>
+            </div>
+            <div class="title">Teiknitól</div>
+            <div class="type">
+                <input type="radio" name="sel-tool" id="move">
+                <label for="move"><i title="Færa hluti til" class="fa-solid fa-arrows-up-down-left-right"></i></label>
+
+                <input type="radio" name="sel-tool" id="pen" checked>
+                <label for="pen"><i title="Teikna frýhendis" class="fa fa-pencil"></i></label>
+
+                <input type="radio" name="sel-tool" id="square">
+                <label for="square"><i title="Teikna kassa" class="fa fa-square-o"></i></label>
+
+                <input type="radio" name="sel-tool" id="circle">
+                <label for="circle"><i title="Teikna hring" class="fa fa-circle-o"></i></label>
+
+                <input type="radio" name="sel-tool" id="line">
+                <label for="line"><i title="Teikna línu" class="fa fa-minus"></i></label>
+
+                <input type="radio" name="sel-tool" id="text">
+                <label for="text"><i title="Skrifa texta" class="fa fa-font"></i></label>
+
+            </div>
+            <div class="title">Stilla útlínu</div>
+            <div class="color">
+                <label for="stroke-color"></label>
+                <input type="color" id="stroke-color" value="#000000">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <input id="outline" type="checkbox" title="Hafa útlínu" checked>
+                <label for="stroke-size"> </label>
+                <div>
+                    <input title="Línubreidd" type="range" id="stroke-size" min="1" max="20">
+                    <span id="lineWidthText" class="label">10</span>
+                </div>
+            </div>
+
+
+            <div class="title">Stilla fyllingu</div>
+            <div class="color">
+                <label for="fill-color"></label>
+                <input type="color" id="fill-color" value="#ff0000">
+                <i class="fa-solid fa-fill" title="Settu hak hér ef þú vilt að það sem þú teiknar sé með fyllingu."></i>
+                <label for="filled"></label><input type="checkbox" id="filled" name="fill" checked
+                    title="Settu hak hér ef þú vilt að það sem þú teiknar sé með fyllingu.">
+            </div>
+
+        </div>
+        <div id="textDiv">
+
+            <textarea id="textBox"></textarea>
+            <div>
+                <select id="fontSelector" name="fontSelector">
+                    <option>Arial</option>
+                    <option>Serif</option>
+                    <option>Sans-Serif</option>
+                    <option>Tahoma</option>
+                    <option>Verdana</option>
+                </select>
+                <i class="fa-solid fa-text-height"></i>
+                <input type="number" id="fontSize" name="fontSize" checked title="Stilla leturstærð" value=20>
+            </div>
         </div>
 
-        <div class="icon" data-shape="line">
-            <i class="fa fa-star-o" aria-hidden="true"></i>
-        </div>
-        <div class="icon" data-shape="circle">
-            <i class="fa fa-circle-o" aria-hidden="true"></i>
-        </div>
-        <div class="icon selected" data-shape="rectangle">
-            <i class="fa fa-square-o" aria-hidden="true"></i>
-        </div>
-        <div class="navEle">
-            <label for="colorPicker"></label><input type="color" id="colorPicker" name="color"
-                                             value="#000000">
-            <input type="checkbox" id="filled" name="fill">
-        </div>
-        <div class="navEle"><button id="undoButton">Undo</button></div>
-        <div class="navEle"><button id="redoButton">Redo</button></div>
-    </nav>
-    <div class="container">
-        <canvas id="my-canvas" width="800" height="600">
+        <canvas id="my-canvas" class="drawingBoard" width="1000" height="800">
             Not supported
         </canvas>
+
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js" charset="utf-8"></script>
-    <script src="shapes.js"></script>
-    <script src="drawio.js"></script>
+
+    <script src="js/lib/makeBelieve.js" charset="utf-8"></script>
+
+    <script src="js/shapes.js" charset="utf-8"></script>
+    <script src="js/app.js"></script>
+    <script src="js/events.js" charset="utf-8"></script>
 </body>
+
 </html>
