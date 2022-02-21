@@ -154,6 +154,12 @@ function isInShape(shape) {
 		let A = element.position;
 		let B = { x: element.endX, y: element.endY };
 		let C = drawio.lastPos;
+		console.log(shape)
+		let startX = A.x < B.x ? A.x: B.x;
+		let endX = A.x > B.x ? A.x: B.x
+		if (){
+			return
+		}
 
 		return (Math.abs((C.y - A.y) * (B.x - A.x) - (B.y - A.y) * (C.x - A.x)) < drawio.strokeSize * 100);
 
@@ -244,7 +250,6 @@ function drawText(e) {
 	drawio.selectedElement = null;
 	drawio.undo_stack = [];
 	drawio.isDrawing = false;
-
 
 	hideTextBox();
 	clearCanvas();
